@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подарки для команды</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: white; margin-bottom: 30px; text-align: center; }
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .gift {
+            aspect-ratio: 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .gift-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .gift.flipped .gift-inner {
+            transform: rotateY(180deg);
+        }
+        .gift-front, .gift-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .gift-front {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: 3px solid #ffd93d;
+        }
+        .gift-back {
+            background: linear-gradient(45deg, #48dbfb, #0abde3);
+            color: white;
+            transform: rotateY(180deg);
+            border: 3px solid #0abde3;
+        }
+        @media (max-width: 768px) {
+            .gifts-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎁 Выберите подарок! 🎁</h1>
+    <div class="gifts-grid" id="giftsGrid"></div>
+
+    <script>
+        const hints = [
+            'Любит кофе по утрам', 'Мечтает о поездке', 'Фанат котиков', 'Секретный сладкоежка',
+            'Любит горы', 'Коллекционирует книги', 'Увлекается спортом', 'Фанатка сериалов',
+            'Любит готовить', 'Мечтает о гаджетах', 'Увлекается музыкой', 'Любит цветы',
+            'Фанатка путешествий', 'Секретный геймер', 'Любит сладкое', 'Увлекается искусством',
+            'Мечтает о новом ноутбуке', 'Фанат собак', 'Любит природу', 'Увлекается танцами',
+            'Секретный поэт', 'Любит чай', 'Фанатка моды', 'Увлекается фото', 'Мечтает о море'
+        ];
+        const names = [
+            'Анна', 'Иван', 'Мария', 'Дмитрий', 'Елена', 'Алексей', 'Ольга', 'Сергей',
+            'Татьяна', 'Михаил', 'Наталья', 'Владимир', 'Ирина', 'Павел', 'Юлия', 'Андрей',
+            'Екатерина', 'Николай', 'Светлана', 'Роман', 'Виктория', 'Денис', 'Анастасия',
+            'Артём', 'Ксения'
+        ];
+        const messages = [
+            'Анна, спасибо за твою энергию! 🎉', 'Иван, лучший кодер команды! 💻',
+            'Мария, твои идеи вдохновляют! ✨', 'Дмитрий, мастер дедлайнов! ⏰',
+            // Добавьте 21 уникальное сообщение для каждого
+            'Елена, душа команды! ❤️', 'Алексей, гуру UX! 🎨', 'Ольга, всегда на связи! 📞',
+            'Сергей, эксперт по API! 🔗', 'Татьяна, креативщица! 🌟', 'Михаил, рок-звезда! 🎸',
+            'Наталья, супер-тестер! 🧪', 'Владимир, стратег! 📊', 'Ирина, волшебница CSS! 🎪',
+            'Павел, быстрый как Flash! ⚡', 'Юлия, лидер по праву! 👑', 'Андрей, мастер JS! ⚙️',
+            'Екатерина, дизайнер мечты! 🖌️', 'Николай, база знаний! 📚', 'Светлана, оптимизатор! 🚀',
+            'Роман, backend-волшебник! 🪄', 'Виктория, фронтенд-королева! 👸', 'Денис, UX-гуру! 🧠',
+            'Анастасия, стильная кодерша! 💃', 'Артём, реакт-мастер! ⚛️', 'Ксения, QA-легенда! 🛡️'
+        ];
+
+        const grid = document.getElementById('giftsGrid');
+        hints.forEach((hint, index) => {
+            const gift = document.createElement('div');
+            gift.className = 'gift';
+            gift.innerHTML = `
+                <div class="gift-inner">
+                    <div class="gift-front">${hint}</div>
+                    <div class="gift-back">${messages[index]}</div>
+                </div>
+            `;
+            gift.addEventListener('click', () => {
+                gift.classList.toggle('flipped');
+                // После клика на открытый подарок можно добавить логику показа имени
+                if (gift.classList.contains('flipped')) {
+                    setTimeout(() => {
+                        gift.querySelector('.gift-back').textContent = names[index];
+                    }, 1000);
+                }
+            });
+            grid.appendChild(gift);
+        });
+    </script>
+</body>
+</html>
