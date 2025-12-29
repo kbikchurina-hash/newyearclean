@@ -41,10 +41,15 @@ h1 {
   cursor: pointer;
   transform-style: preserve-3d;
   transition: transform .3s;
+  z-index: 1;
 }
 
 .gift:hover {
   transform: translateY(-14px);
+}
+
+.gift.active {
+  z-index: 50;
 }
 
 /* BOX */
@@ -69,94 +74,44 @@ h1 {
   transition: transform .8s cubic-bezier(.19,1,.22,1);
 }
 
-/* RIBBONS */
-.ribbon-v, .ribbon-h {
-  position: absolute;
-  background: linear-gradient(#f5c542, #d4a017);
-}
-
-.ribbon-v {
-  width: 18px;
-  height: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ribbon-h {
-  height: 18px;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* BOW */
-.bow {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  width: 64px;
-  height: 42px;
-  transform: translateX(-50%);
-  animation: bowPulse 2.2s infinite;
-}
-
-.bow::before,
-.bow::after {
-  content: "";
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(#f5c542, #d4a017);
-  border-radius: 50%;
-}
-
-.bow::before { left: 0; }
-.bow::after { right: 0; }
-
-@keyframes bowPulse {
-  0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
-  50% { transform: translateX(-50%) scale(1.12) rotate(8deg); }
-}
-
-/* PROFESSION */
-.profession {
-  position: absolute;
-  top: 90px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  color: black;
-  padding: 6px 14px;
-  font-size: 14px;
-  border-radius: 10px;
-  animation: jump 1.6s infinite;
-}
-
-@keyframes jump {
-  0%,100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-6px); }
-}
-
 /* NOTE */
 .note {
   position: absolute;
-  top: 28px;
+  top: -10px;
   left: 50%;
-  transform: translateX(-50%) scale(0);
+  transform: translateX(-50%) scale(0.85);
   background: #fff;
   color: #000;
-  padding: 14px;
-  width: 175px;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 20px 22px;
+  width: 320px;
+  max-height: 260px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.5;
   opacity: 0;
-  transition: .6s;
-  z-index: 2;
+  overflow-y: auto;
+  white-space: pre-line;
+  transition: .5s;
+  z-index: 10;
+  box-shadow: 0 18px 40px rgba(0,0,0,.5);
 }
 
 .note.show {
   opacity: 1;
-  transform: translateX(-50%) scale(1) translateY(-12px);
+  transform: translateX(-50%) scale(1) translateY(-20px);
+}
+
+/* ZOOM MODE */
+.note.zoom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 80vw;
+  max-height: 80vh;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 1000;
+  font-size: 18px;
+  line-height: 1.7;
 }
 
 /* NAME */
@@ -191,53 +146,14 @@ h1 {
 <div class="grid" id="grid"></div>
 
 <script>
-const hints = [
-'Черепашка ниндзя','Архитектор','Взрослый','Космонавт','Пекарь-путешественник',
-'Пастух','Дизайнер интерьеров','Актёр озвучки','Художник','Диджей | Повар',
-'Батюшка | Сотрудник МЧС','Продавец мяса на рынке','Взрослая','Учитель английского',
-'Принцесса','Шпионка тотали спайс','Баянист','Учитель','Повар','Человек-паук',
-'Следователь','Путешественник с кокосом','Архитектор','Ветеринар','Стюардесса',
-'Врач | Батюшка'
-];
-
-const names = [
-'Влад Плаксин','Ефремов Никита','Юра Харченко','Петринич Никита','Сережа Соловьев',
-'Миша Станкеев','Олесья Юревна','Кузнецов Дмитрий','Оксана Кузьменко','Егор Гемельянов',
-'Артём Сергунин','Диана Гарбуз','Виктория Щербо','Настя Дунаева','Майя Мищенко',
-'Настя Жихарева','Рафаиль Копров','Звонкович Анастасия','Самвел Оганесян','Илья Иёшкин',
-'Даша Ревтович','Александр Мамонтов','Вадим Сусько','Каролина Бикчурина',
-'Даша Чигилейчик','Жук Дима'
-];
-
 const achievements = [
-  '3 новые страны — Эмираты, Испания, Франция',
-  'Получение прав на мот и откатанный первый сезон',
-  'Все события 15-го числа — день зарплаты',
-  'Концерт Тимберлейка и поездка в Сванетию',
-  'Подготовка документов на квартиру',
-  'Поездки в Суздаль, новая работа и катание на велосипеде',
-  'Выжил(а). Сдал(а) госэкзамен на знание истории и культуры страны, брак, жареные хинкали и бокс',
-  'Коррекция зрения, Питер, новая работа и путешествия',
-  'Трудоустройство',
-  'Покупка новой стиральной машины',
-  'V3 и победа над филдами, несколько свадеб и концерт ATL',
-  'Трудоустройство, переезд и всего 5 созвонов за год',
-  'Появилась кошка, путешествия по Европе, встреча с лидом и новые тату',
-  'В этом году был(а) сладкой булочкой',
-  'Много путешествий, вождение в Махачкале, рассвет на самой высокой горе Египта и катание на подводной лодке',
-  'Развитие команды V3 и диз-систем, снятие брекетов и выдача лучшей подруги замуж',
-  'Поездки с семьёй в Выборг и на базу отдыха Иллоранта',
-  'Покупка пульта для диджеинга и сведение первого сета\nЛечение руки и возвращение на тренировки\nПерезаключение контракта с компанией на много лет\nПокупка подарка маме — большая посудомоечная машина',
-  'Собрано рабочее место мечты',
-  'Много путешествий и переезд в страну мечты',
-  'Родился племянник и путешествие в Европу',
-  'Путешествия и кокос на пляже',
-  'Путешествие в Сербию, фестиваль Exit и белорусский фестиваль Купалле в Тбилиси',
-  'Трудоустройство, сом на 20 кг, наркоз и два концерта в других странах',
-  'Две поездки на море',
-  'Сестра вышла замуж, поездка в Питер, стал(а) землевладельцем, строительство гаража, сарая, курятника и пьяное падение с мотоцикла'
+  'Покупка пульта для диджеинга\nСведение первого сета\nЛечение руки и возвращение на тренировки\nПерезаключение контракта\nПодарок маме — большая посудомоечная машина',
+  'Много путешествий\nПереезд в страну мечты\nНовая жизнь',
+  'Родился племянник\nПоездка в Европу\nСильный год'
 ];
 
+const names = ['Аня', 'Макс', 'Катя'];
+const hints = ['DJ', 'Путешественник', 'Семья'];
 
 const grid = document.getElementById('grid');
 
@@ -249,38 +165,43 @@ hints.forEach((hint, i) => {
 
   gift.innerHTML = `
     <div class="lid"></div>
-    <div class="bow"></div>
-    <div class="box">
-      <div class="ribbon-v"></div>
-      <div class="ribbon-h"></div>
-    </div>
-    <div class="profession">${hint}</div>
+    <div class="box"></div>
     <div class="note">${achievements[i] || ''}</div>
     <div class="name">${names[i] || ''}</div>
   `;
 
+  const note = gift.querySelector('.note');
+
+  /* CLICK — логика шагов */
   gift.addEventListener('click', () => {
     const step = Number(gift.dataset.step);
     const lid = gift.querySelector('.lid');
-    const note = gift.querySelector('.note');
     const name = gift.querySelector('.name');
 
     if (step === 0) {
       lid.style.transform = 'rotateX(-110deg)';
       gift.dataset.step = '1';
-    } 
+    }
     else if (step === 1) {
       note.classList.add('show');
+      gift.classList.add('active');
       gift.dataset.step = '2';
-    } 
+    }
     else if (step === 2) {
       name.classList.add('show');
       gift.dataset.step = '3';
-    } 
+    }
     else if (step === 3 && gift.dataset.opened !== 'true') {
       note.classList.remove('show');
+      gift.classList.remove('active');
       gift.dataset.opened = 'true';
     }
+  });
+
+  /* DOUBLE CLICK — ZOOM */
+  note.addEventListener('dblclick', (e) => {
+    e.stopPropagation();
+    note.classList.toggle('zoom');
   });
 
   grid.appendChild(gift);
