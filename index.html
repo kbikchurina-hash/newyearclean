@@ -15,19 +15,18 @@ body {
   background: radial-gradient(circle at top, #1b1b1b, #000);
   color: white;
   text-align: center;
-  overflow-x: hidden;
 }
 
 h1 {
-  margin: 20px 0;
-  font-size: 36px;
+  margin: 30px 0;
+  font-size: 44px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
-  padding: 30px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 60px;
+  padding: 50px;
   max-width: 1600px;
   margin: auto;
   perspective: 1200px;
@@ -35,8 +34,8 @@ h1 {
 
 /* ===== GIFT ===== */
 .gift {
-  width: 140px;
-  height: 160px;
+  width: 200px;
+  height: 210px;
   position: relative;
   margin: auto;
   cursor: pointer;
@@ -46,11 +45,11 @@ h1 {
 }
 
 .gift:hover {
-  transform: translateY(-10px);
+  transform: translateY(-14px);
 }
 
 .gift.active {
-  z-index: 50;
+  z-index: 50; /* карточка поверх остальных при открытии */
 }
 
 /* BOX */
@@ -58,9 +57,9 @@ h1 {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 100px;
+  height: 135px;
   background: #c40000;
-  border-radius: 10px;
+  border-radius: 14px;
 }
 
 /* LID */
@@ -68,9 +67,9 @@ h1 {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 60px;
+  height: 70px;
   background: #e00000;
-  border-radius: 10px;
+  border-radius: 14px;
   transform-origin: top;
   transition: transform .8s cubic-bezier(.19,1,.22,1);
 }
@@ -82,14 +81,14 @@ h1 {
 }
 
 .ribbon-v {
-  width: 14px;
+  width: 18px;
   height: 100%;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .ribbon-h {
-  height: 14px;
+  height: 18px;
   width: 100%;
   top: 50%;
   transform: translateY(-50%);
@@ -98,10 +97,10 @@ h1 {
 /* BOW */
 .bow {
   position: absolute;
-  top: -20px;
+  top: -30px;
   left: 50%;
-  width: 50px;
-  height: 32px;
+  width: 64px;
+  height: 42px;
   transform: translateX(-50%);
   animation: bowPulse 2.2s infinite;
 }
@@ -110,8 +109,8 @@ h1 {
 .bow::after {
   content: "";
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(#f5c542, #d4a017);
   border-radius: 50%;
 }
@@ -121,55 +120,56 @@ h1 {
 
 @keyframes bowPulse {
   0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
-  50% { transform: translateX(-50%) scale(1.1) rotate(8deg); }
+  50% { transform: translateX(-50%) scale(1.12) rotate(8deg); }
 }
 
 /* PROFESSION */
 .profession {
   position: absolute;
-  top: 70px;
+  top: 90px;
   left: 50%;
   transform: translateX(-50%);
   background: white;
   color: black;
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 10px;
   animation: jump 1.6s infinite;
 }
 
 @keyframes jump {
   0%,100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+  50% { transform: translateX(-50%) translateY(-6px); }
 }
 
 /* NOTE */
 .note {
   position: absolute;
-  top: 20px;
+  top: 28px;
   left: 50%;
   transform: translateX(-50%) scale(0);
   background: #fff;
   color: #000;
-  padding: 10px;
-  width: 280px;
-  max-height: 200px;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 1.4;
+  padding: 14px;
+  width: 320px;       /* шире */
+  max-height: 260px;  /* выше */
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
   opacity: 0;
-  overflow-y: auto;
-  white-space: pre-line;
-  transition: .4s;
+  overflow-y: auto;   /* скролл */
+  white-space: pre-line; /* переносы \n */
+  transition: .5s;
   z-index: 10;
-  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
 }
 
 .note.show {
   opacity: 1;
-  transform: translateX(-50%) scale(1) translateY(-8px);
+  transform: translateX(-50%) scale(1) translateY(-12px);
 }
 
+/* Zoom по двойному клику */
 .note.zoom {
   position: fixed;
   top: 50%;
@@ -177,7 +177,7 @@ h1 {
   width: 80vw;
   max-height: 80vh;
   transform: translate(-50%, -50%);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.7;
   z-index: 1000;
 }
@@ -185,20 +185,20 @@ h1 {
 /* NAME */
 .name {
   position: absolute;
-  top: 90px;
+  top: 110px;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
   opacity: 0;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 700;
   background: rgba(0,0,0,0.75);
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 10px;
   z-index: 3;
 }
 
 .name.show {
-  animation: namePop .8s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation: namePop .9s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 
 @keyframes namePop {
@@ -214,7 +214,6 @@ h1 {
 <div class="grid" id="grid"></div>
 
 <script>
-// Данные
 const hints = [
 'Черепашка ниндзя','Архитектор','Взрослый','Космонавт','Пекарь-путешественник',
 'Пастух','Дизайнер интерьеров','Актёр озвучки','Художник','Диджей | Повар',
@@ -262,7 +261,6 @@ const achievements = [
   'Сестра вышла замуж, поездка в Питер, стал(а) землевладельцем, строительство гаража, сарая, курятника и пьяное падение с мотоцикла'
 ];
 
-// Генерация подарков
 const grid = document.getElementById('grid');
 
 hints.forEach((hint, i) => {
@@ -289,7 +287,7 @@ hints.forEach((hint, i) => {
 
   // Double click для увеличения заметки
   note.addEventListener('dblclick', e => {
-    e.stopPropagation();
+    e.stopPropagation(); // click по подарку не срабатывает
     note.classList.toggle('zoom');
   });
 
@@ -302,7 +300,7 @@ hints.forEach((hint, i) => {
     } 
     else if (step === 1) {
       note.classList.add('show');
-      gift.classList.add('active');
+      gift.classList.add('active'); // карточка поверх сетки
       gift.dataset.step = '2';
     } 
     else if (step === 2) {
