@@ -5,174 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Подарки для команды 🎁</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            margin: 0;
-            padding: 20px;
             min-height: 100vh;
+            padding: 20px;
             overflow-x: hidden;
         }
         h1 {
             color: #ffd700;
             text-align: center;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            font-size: clamp(2rem, 6vw, 4rem);
+            text-shadow: 0 0 20px rgba(255,215,0,0.6);
             margin-bottom: 40px;
             animation: glow 2s ease-in-out infinite alternate;
         }
-        @keyframes glow { 0% { text-shadow: 0 0 20px rgba(255,215,0,0.5); } 100% { text-shadow: 0 0 30px rgba(255,215,0,0.8); } }
+        @keyframes glow {
+            0% { text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+            100% { text-shadow: 0 0 40px rgba(255,215,0,0.8); }
+        }
 
         .gifts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
         }
+
         .gift {
-            perspective: 1200px;
-            height: 160px;
+            perspective: 1000px;
+            height: 200px;
             cursor: pointer;
             position: relative;
-        }
-        .gift-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
             transition: transform 0.3s ease;
         }
-        .gift-wrapper:hover { transform: translateY(-5px) rotateX(5deg); }
-        
-        /* Состояния подарка */
-        .gift.unopened { }
-        .gift.opened .gift-wrapper { transform: rotateX(-15deg) translateY(10px); }
-        .gift.opening .gift-wrapper { animation: lidLift 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .gift:hover { transform: translateY(-8px) rotateX(8deg); }
+        .gift.opened { transform: rotateX(-20deg) translateY(12px) !important; }
 
-        @keyframes lidLift {
-            0% { transform: rotateX(0deg); }
-            100% { transform: rotateX(-25deg) translateY(15px); }
-        }
-
-        /* Коробка */
-        .gift-box {
+        .gift-container {
             position: relative;
             width: 100%;
             height: 100%;
-            transform-style: preserve-3d;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            border-radius: 12px;
+            transform-style: preserve-3d;
         }
-        .gift-box .face {
-            position: absolute;
-            background: linear-gradient(145deg, #c41e3a, #d63031);
-            border: 3px solid #8b0000;
-            box-shadow: 
-                0 12px 24px rgba(0,0,0,0.4),
-                inset 0 2px 4px rgba(255,255,255,0.1);
-            border-radius: 10px;
-        }
-        .gift-box .bottom { height: 100%; width: 100%; transform: translateZ(-3px); }
-        .gift-box .lid { height: 52%; width: 100%; top: 0; transform-origin: bottom; z-index: 2; }
-        .gift-box .side { 
-            width: 6px; height: 100%; 
-            background: linear-gradient(145deg, #a11227, #b71c1c);
-            box-shadow: inset 1px 0 2px rgba(0,0,0,0.3);
-        }
-        .gift-box .side.left { left: 0; transform: translateZ(-3px) rotateY(-90deg); }
-        .gift-box .side.right { right: 0; transform: translateZ(3px) rotateY(90deg); }
 
-        /* Золотой бант */
+        /* Лицевая сторона - подарок */
+        .gift-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                inset 0 2px 8px rgba(255,255,255,0.1);
+            background: 
+                linear-gradient(145deg, #dc2626, #b91c1c),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23a21e1e" x="0" y="0" width="100" height="100"/><rect fill="%23dc2626" x="5" y="5" width="90" height="90" rx="8"/></svg>');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Золотая лента */
         .ribbon {
             position: absolute;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+            background: linear-gradient(45deg, #facc15, #fde047);
+            box-shadow: 0 4px 16px rgba(250,204,21,0.5);
             z-index: 3;
             border-radius: 4px;
         }
-        .ribbon.horizontal { width: 100%; height: 8px; top: 45%; }
-        .ribbon.vertical { height: 100%; width: 8px; left: 45%; }
-        .ribbon.bow {
-            width: 24px; height: 24px;
-            top: 38%; left: 38%;
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(255,215,0,0.6);
-            animation: bowFloat 3s ease-in-out infinite;
+        .ribbon.horizontal { 
+            width: 100%; 
+            height: 12px; 
+            top: 40%; 
         }
-        @keyframes bowFloat { 0%, 100% { transform: scale(1) rotateZ(0deg); } 50% { transform: scale(1.05) rotateZ(180deg); } }
+        .ribbon.vertical { 
+            height: 100%; 
+            width: 12px; 
+            left: 40%; 
+        }
+        .ribbon.bow {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            top: 35%;
+            left: 35%;
+            background: radial-gradient(circle, #facc15 40%, #fde047 70%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 
+                0 0 20px rgba(250,204,21,0.7),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+            animation: bowFloat 4s ease-in-out infinite;
+        }
+        .ribbon.bow::before,
+        .ribbon.bow::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 20px;
+            background: radial-gradient(circle, #facc15 40%, #fde047 70%);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ribbon.bow::before { left: -12px; }
+        .ribbon.bow::after { right: -12px; }
+
+        @keyframes bowFloat {
+            0%, 100% { transform: scale(1) rotateZ(0deg); }
+            50% { transform: scale(1.08) rotateZ(180deg); }
+        }
 
         /* Этикетка с профессией */
         .label {
             position: absolute;
-            background: linear-gradient(145deg, #fff, #f8f9fa);
-            width: 70%; height: 28%;
-            top: 32%; left: 15%;
-            border-radius: 6px;
-            border: 2px solid #ffd700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 600;
-            color: #333;
+            bottom: 12px;
+            left: 8px;
+            right: 8px;
+            background: linear-gradient(145deg, #fff, #fef3c7);
+            border: 2px solid #facc15;
+            border-radius: 8px;
+            padding: 8px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #b91c1c;
             text-align: center;
-            padding: 4px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            line-height: 1.2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 4;
-            animation: labelBounce 2s ease-in-out infinite;
+            animation: labelBounce 2.5s ease-in-out infinite;
         }
         @keyframes labelBounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-2px); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Задняя сторона - содержимое */
+        .gift-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            border-radius: 16px;
+            background: linear-gradient(145deg, #fef3c7, #fde68a);
+            box-shadow: 
+                inset 0 2px 8px rgba(255,255,255,0.6),
+                0 20px 40px rgba(0,0,0,0.3);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
         /* Записка */
         .note {
-            position: absolute;
-            top: 60%; left: 10%; right: 10%;
             background: linear-gradient(145deg, #fff8dc, #f4e4bc);
-            border: 2px dashed #d4a574;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 11px;
-            line-height: 1.3;
-            color: #8b4513;
+            border: 2px dashed #d97706;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #92400e;
             font-family: 'Georgia', serif;
-            transform: scale(0) rotateX(90deg);
-            transform-origin: top;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 5;
+            text-align: center;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.5s ease;
         }
-        .gift.show-note .note { transform: scale(1) rotateX(0deg); }
+        .gift.show-note .note { opacity: 1; transform: translateY(0) scale(1); }
 
         /* Имя */
         .name {
-            position: absolute;
-            bottom: 15%; left: 20%; right: 20%;
-            background: linear-gradient(145deg, #ffd700, #ffed4e);
-            color: #8b0000;
-            font-weight: bold;
-            font-size: 14px;
-            padding: 8px 12px;
-            border-radius: 20px;
+            background: linear-gradient(145deg, #facc15, #fde047);
+            color: #b91c1c;
+            font-weight: 800;
+            font-size: 16px;
+            padding: 12px 20px;
+            border-radius: 25px;
             text-align: center;
-            transform: translateY(20px) scale(0.8);
+            box-shadow: 0 8px 24px rgba(250,204,21,0.5);
             opacity: 0;
-            transition: all 0.4s ease;
-            box-shadow: 0 6px 16px rgba(255,215,0,0.4);
-            z-index: 6;
+            transform: translateY(30px) scale(0.8);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            width: 100%;
         }
         .gift.show-name .name {
-            transform: translateY(0) scale(1);
             opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
+        .gift.flipped .gift-container { transform: rotateY(180deg); }
+
         @media (max-width: 768px) {
-            .gifts-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-            .label { font-size: 9px; }
-            .note { font-size: 10px; padding: 8px; }
+            .gifts-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+            .label { font-size: 10px; padding: 6px 4px; }
+            .note { font-size: 11px; padding: 12px; }
         }
     </style>
 </head>
@@ -198,48 +235,48 @@
         const grid = document.getElementById('giftsGrid');
         hints.forEach((hint, index) => {
             const gift = document.createElement('div');
-            gift.className = 'gift unopened';
+            gift.className = `gift`;
             gift.dataset.index = index;
+            
+            let state = 'closed'; // closed, note, name, opened
+
             gift.innerHTML = `
-                <div class="gift-wrapper">
-                    <div class="gift-box">
-                        <div class="face bottom"></div>
-                        <div class="face lid"></div>
-                        <div class="face side left"></div>
-                        <div class="face side right"></div>
+                <div class="gift-container">
+                    <div class="gift-front">
                         <div class="ribbon horizontal"></div>
                         <div class="ribbon vertical"></div>
-                        <div class="ribbon bow">🎀</div>
+                        <div class="ribbon bow"></div>
                         <div class="label">${hint}</div>
                     </div>
-                    <div class="note">Спасибо за твою уникальность! ${hint.charAt(0).toUpperCase() + hint.slice(1)} — это круто! ✨</div>
-                    <div class="name">${names[index]}</div>
+                    <div class="gift-back">
+                        <div class="note">Спасибо за твою уникальность! ${hint.charAt(0).toUpperCase() + hint.slice(1)} — это круто! ✨</div>
+                        <div class="name">${names[index]}</div>
+                    </div>
                 </div>
             `;
-            
-            let state = 'unopened'; // unopened, note, name
-            
-            gift.addEventListener('click', () => {
-                if (state === 'unopened') {
-                    // 1. Подарок → записка
-                    gift.classList.remove('unopened');
-                    gift.classList.add('opening', 'show-note');
+
+            gift.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                if (state === 'closed') {
+                    // 1. Закрытый → записка
+                    gift.classList.add('flipped', 'show-note');
                     state = 'note';
                 } else if (state === 'note') {
                     // 2. Записка → имя
                     gift.classList.add('show-name');
-                    gift.classList.remove('opening');
-                    gift.classList.add('opened');
                     state = 'name';
                 } else if (state === 'name') {
-                    // 3. Имя → назад (но подарок остаётся открытым)
-                    gift.classList.remove('show-name');
+                    // 3. Имя → открыт навсегда
+                    gift.classList.add('opened');
+                    gift.classList.remove('show-note', 'show-name', 'flipped');
                     state = 'opened';
                 }
             });
-            
+
             grid.appendChild(gift);
         });
     </script>
 </body>
 </html>
+
