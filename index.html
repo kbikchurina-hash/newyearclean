@@ -3,277 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подарки для команды 🎁</title>
+    <title>🎁 Подарки команды</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: -apple-system, sans-serif;
             min-height: 100vh;
             padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         h1 {
-            color: #fff;
-            font-size: 3rem;
-            margin-bottom: 60px;
+            color: white;
             text-align: center;
-            text-shadow: 0 0 30px #ffd700;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 50px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
         }
-
-        .gifts-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 35px;
-            max-width: 1500px;
-        }
-
-        .gift {
-            height: 260px;
-            cursor: pointer;
-            position: relative;
-            perspective: 1200px;
-        }
-
-        /* ТОЧНАЯ КОРОВКА ИЗ ВИДЕО */
-        .gift-box {
-            position: relative;
-            width: 100%;
-            height: 100%;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
             margin: 0 auto;
         }
-
-        /* ДНО - пиксельно как в видео */
+        .gift {
+            height: 240px;
+            cursor: pointer;
+            position: relative;
+            perspective: 1000px;
+            transition: transform 0.3s ease;
+        }
+        .gift:hover { transform: translateY(-10px) rotateY(5deg); }
+        
+        .box {
+            position: relative;
+            width: 180px;
+            height: 100%;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+        }
+        
         .bottom {
             position: absolute;
             bottom: 0;
             left: 50%;
-            transform: translateX(-50%);
-            width: 170px;
+            width: 160px;
             height: 140px;
-            background: 
-                linear-gradient(135deg, #d32f2f 0%, #b71c1c 50%, #8b0000 100%);
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
             border-radius: 0 0 25px 25px;
-            border: 5px solid #7f0000;
-            box-shadow: 
-                12px 0 25px rgba(139,0,0,0.6),
-                -12px 0 25px rgba(139,0,0,0.6),
-                0 30px 60px rgba(0,0,0,0.7);
+            border: 4px solid #a93226;
+            box-shadow: 0 20px 40px rgba(231,76,60,0.4), inset 0 2px 10px rgba(255,255,255,0.2);
+            transform: translateX(-50%);
         }
-
-        /* КРЫШКА - пиксельно как в видео */
+        
         .lid {
             position: absolute;
             top: 0;
             left: 50%;
-            transform: translateX(-50%);
-            width: 170px;
+            width: 160px;
             height: 130px;
-            background: 
-                linear-gradient(135deg, #f44336 0%, #d32f2f 50%, #b71c1c 100%);
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
             border-radius: 25px 25px 0 0;
-            border: 5px solid #7f0000;
-            box-shadow: 
-                10px 0 20px rgba(139,0,0,0.5),
-                -10px 0 20px rgba(139,0,0,0.5),
-                0 25px 50px rgba(0,0,0,0.6);
-            transform-origin: bottom center;
-            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 4px solid #a93226;
+            box-shadow: 0 15px 30px rgba(231,76,60,0.4), inset 0 3px 12px rgba(255,255,255,0.25);
+            transform: translateX(-50%);
+            transform-origin: bottom;
+            transition: all 0.8s ease-out;
             z-index: 10;
         }
-
-        /* ОТКРЫТИЕ - ТОЧНО КАК В ВИДЕО */
-        .gift.opening .lid {
-            transform: translateX(-50%) rotateX(-120deg);
+        
+        .gift.open .lid {
+            transform: translateX(-50%) rotateX(-110deg);
         }
-
-        /* ЛЕНТА - БЛЕСТЯЩАЯ КАК В ВИДЕО */
-        .ribbon-h {
-            position: absolute;
-            top: 115px;
-            left: -10px;
-            width: 190px;
-            height: 16px;
-            background: 
-                linear-gradient(90deg, 
-                    #fff176 0%, #fdd835 25%, #ffeb3b 50%, 
-                    #fdd835 75%, #fff176 100%);
-            border-radius: 10px;
-            box-shadow: 
-                0 6px 20px rgba(255,235,59,0.8),
-                inset 0 2px 4px rgba(255,255,255,0.6);
-        }
-
+        
         .ribbon-v {
             position: absolute;
-            left: 77px;
-            top: -10px;
-            width: 16px;
-            height: 190px;
-            background: 
-                linear-gradient(90deg, 
-                    #fff176 0%, #fdd835 25%, #ffeb3b 50%, 
-                    #fdd835 75%, #fff176 100%);
-            border-radius: 10px;
-            box-shadow: 
-                0 6px 20px rgba(255,235,59,0.8),
-                inset 0 2px 4px rgba(255,255,255,0.6);
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            margin-left: -6px;
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(241,196,15,0.6);
         }
-
-        /* БАНТ - ОБЪЁМНЫЙ КАК В ВИДЕО */
+        .ribbon-h {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 12px;
+            margin-top: -6px;
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(241,196,15,0.6);
+        }
+        
         .bow {
             position: absolute;
-            top: 85px;
+            top: 95px;
             left: 75px;
-            width: 50px;
-            height: 50px;
-            background: 
-                radial-gradient(ellipse 70% 80% at 50% 30%, #fff176 0%, #fdd835 60%, #f57f17 100%);
-            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-            box-shadow: 
-                0 12px 35px rgba(255,235,59,0.9),
-                inset 0 6px 15px rgba(255,255,255,0.7),
-                inset 0 -4px 12px rgba(245,127,23,0.4);
-            z-index: 20;
-            animation: bowFloat 4s ease-in-out infinite;
-        }
-        .bow::before,
-        .bow::after {
-            content: '';
-            position: absolute;
-            width: 28px;
-            height: 36px;
-            background: radial-gradient(ellipse 65% 75%, #fff176 0%, #fdd835 70%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #f1c40f 0%, #f39c12 70%);
             border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            box-shadow: 0 6px 18px rgba(255,235,59,0.7);
+            box-shadow: 0 8px 25px rgba(241,196,15,0.8), inset 0 4px 10px rgba(255,255,255,0.4);
+            animation: bowGlow 2s ease-in-out infinite alternate;
         }
-        .bow::before { left: -22px; }
-        .bow::after { right: -22px; }
-
-        @keyframes bowFloat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        /* ЭТИКЕТКА - МАЛЕНЬКАЯ КАК В ВИДЕО */
-        .label {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: linear-gradient(145deg, #fffde7, #fff9c4);
-            border: 4px solid #fff176;
-            border-radius: 14px;
-            padding: 10px 8px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #b71c1c;
-            text-align: center;
-            line-height: 1.2;
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.5),
-                inset 0 3px 8px rgba(255,255,255,0.8);
-        }
-
-        /* СОДЕРЖИМОЕ */
-        .content {
-            position: absolute;
-            top: 160px;
-            left: 25px;
-            right: 25px;
-            height: 80px;
-        }
-        .note {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(145deg, #fff8dc, #f5e6b2);
-            border: 3px dashed #f57c00;
-            border-radius: 16px;
-            padding: 16px 12px;
-            font-size: 12px;
-            line-height: 1.3;
-            color: #e65100;
-            text-align: center;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.8s 0.6s ease-out;
-        }
-        .gift.opening .note {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .name {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(145deg, #fff176, #fdd835);
-            color: #b71c1c;
-            font-weight: 800;
-            font-size: 15px;
-            padding: 12px 18px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(255,235,59,0.7);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.7s 1.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        .gift.show-name .name {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .gifts-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-        }
-    </style>
-</head>
-<body>
-    <h1>🎁 Что ты хотел стать в детстве? 🎁</h1>
-    <div class="gifts-grid" id="giftsGrid"></div>
-
-    <script>
-        const hints = ['черепашка-ниндзя','архитектор','взрослый человек','космонавт','пекарь-путешественник','пастух','дизайнер интерьеров','актёр озвучки','блогер','программист','художник','диджей','повар','батюшка','сотрудник МЧС','разработчик','дизайнер','продавец','учительница','адвокат','взрослая','учитель английского','кассир','пиццамейкер','бариста'];
-        const names = ['Анна','Иван','Мария','Дмитрий','Елена','Алексей','Ольга','Сергей','Татьяна','Михаил','Наталья','Владимир','Ирина','Павел','Юлия','Андрей','Екатерина','Николай','Светлана','Роман','Виктория','Денис','Анастасия','Артём','Ксения'];
-
-        const grid = document.getElementById('giftsGrid');
-        hints.forEach((hint, i) => {
-            const gift = document.createElement('div');
-            gift.className = 'gift';
-            gift.innerHTML = `
-                <div class="gift-box">
-                    <div class="bottom"></div>
-                    <div class="lid"></div>
-                    <div class="ribbon-h"></div>
-                    <div class="ribbon-v"></div>
-                    <div class="bow"></div>
-                    <div class="label">${hint}</div>
-                    <div class="content">
-                        <div class="note">Спасибо за уникальность!<br><strong>${hint.charAt(0).toUpperCase()+hint.slice(1)}</strong> ✨</div>
-                        <div class="name">${names[i]}</div>
-                    </div>
-                </div>
-            `;
-            
-            let opened = false;
-            gift.addEventListener('click', () => {
-                if (!opened) {
-                    gift.classList.add('opening');
-                    setTimeout(() => gift.classList.add('show-name'), 1400);
-                    opened = true;
-                }
-            });
-            
-            grid.appendChild(gift);
-        });
-    </script>
-</body>
-</html>
-
