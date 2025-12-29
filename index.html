@@ -129,7 +129,6 @@ h1 {
   padding: 6px 14px;
   font-size: 14px;
   border-radius: 10px;
-  text-align: center;
   animation: jump 1.6s infinite;
 }
 
@@ -169,32 +168,20 @@ h1 {
   opacity: 0;
   font-size: 17px;
   font-weight: 700;
-  color: white;
   background: rgba(0,0,0,0.75);
   padding: 6px 14px;
   border-radius: 10px;
-  box-shadow: 0 6px 16px rgba(0,0,0,.4);
   z-index: 3;
 }
 
 .name.show {
-  animation: namePop 0.9s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation: namePop .9s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 
 @keyframes namePop {
-  0% {
-    transform: translateX(-50%) scale(0.6);
-    opacity: 0;
-  }
-  70% {
-    transform: translateX(-50%) scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-  }
-}
+  0% { transform: translateX(-50%) scale(0.6); opacity: 0; }
+  70% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
 </style>
 </head>
@@ -256,7 +243,7 @@ const grid = document.getElementById('grid');
 hints.forEach((hint, i) => {
   const gift = document.createElement('div');
   gift.className = 'gift';
-  gift.dataset.step = 0;
+  gift.dataset.step = '0';
   gift.dataset.opened = 'false';
 
   gift.innerHTML = `
@@ -271,43 +258,26 @@ hints.forEach((hint, i) => {
     <div class="name">${names[i] || ''}</div>
   `;
 
- gift.addEventListener('click', () => {
-  let step = Number(gift.dataset.step);
-  const lid = gift.querySelector('.lid');
-  const note = gift.querySelector('.note');
-  const name = gift.querySelector('.name');
-
-  if (step === 0) {
-    lid.style.transform = 'rotateX(-110deg)';
-    gift.dataset.step = 1;
-  } 
-  else if (step === 1) {
-    note.classList.add('show');
-    gift.dataset.step = 2;
-  } 
-  else if (step === 2) {
-    name.classList.add('show');
-    gift.dataset.step = 3;
-  } 
-  else if (step === 3 && gift.dataset.opened === 'false') {
-    note.classList.remove('show'); // ❗ имя НЕ трогаем
-    gift.dataset.opened = 'true';
-  }
-});
-
+  gift.addEventListener('click', () => {
+    const step = Number(gift.dataset.step);
+    const lid = gift.querySelector('.lid');
+    const note = gift.querySelector('.note');
+    const name = gift.querySelector('.name');
 
     if (step === 0) {
       lid.style.transform = 'rotateX(-110deg)';
-      gift.dataset.step = 1;
-    } else if (step === 1) {
+      gift.dataset.step = '1';
+    } 
+    else if (step === 1) {
       note.classList.add('show');
-      gift.dataset.step = 2;
-    } else if (step === 2) {
+      gift.dataset.step = '2';
+    } 
+    else if (step === 2) {
       name.classList.add('show');
-      gift.dataset.step = 3;
-    } else if (step === 3 && gift.dataset.opened === 'false') {
+      gift.dataset.step = '3';
+    } 
+    else if (step === 3 && gift.dataset.opened !== 'true') {
       note.classList.remove('show');
-      name.classList.remove('show');
       gift.dataset.opened = 'true';
     }
   });
