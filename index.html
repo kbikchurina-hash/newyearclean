@@ -3,120 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Подарки для команды</title>
+    <title>Подарки для команды 🎁</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            overflow-x: hidden;
         }
-        h1 { color: white; margin-bottom: 30px; text-align: center; }
+        h1 {
+            color: #ffd700;
+            text-align: center;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow { 0% { text-shadow: 0 0 20px rgba(255,215,0,0.5); } 100% { text-shadow: 0 0 30px rgba(255,215,0,0.8); } }
+
         .gifts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            width: 100%;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
         }
         .gift {
-            aspect-ratio: 1;
-            perspective: 1000px;
+            perspective: 1200px;
+            height: 160px;
             cursor: pointer;
+            position: relative;
         }
-        .gift-inner {
+        .gift-wrapper {
             position: relative;
             width: 100%;
             height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
         }
-        .gift.flipped .gift-inner {
-            transform: rotateY(180deg);
+        .gift-wrapper:hover { transform: translateY(-5px) rotateX(5deg); }
+        
+        /* Состояния подарка */
+        .gift.unopened { }
+        .gift.opened .gift-wrapper { transform: rotateX(-15deg) translateY(10px); }
+        .gift.opening .gift-wrapper { animation: lidLift 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+        @keyframes lidLift {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(-25deg) translateY(15px); }
         }
-        .gift-front, .gift-back {
-            position: absolute;
+
+        /* Коробка */
+        .gift-box {
+            position: relative;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             border-radius: 12px;
+        }
+        .gift-box .face {
+            position: absolute;
+            background: linear-gradient(145deg, #c41e3a, #d63031);
+            border: 3px solid #8b0000;
+            box-shadow: 
+                0 12px 24px rgba(0,0,0,0.4),
+                inset 0 2px 4px rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .gift-box .bottom { height: 100%; width: 100%; transform: translateZ(-3px); }
+        .gift-box .lid { height: 52%; width: 100%; top: 0; transform-origin: bottom; z-index: 2; }
+        .gift-box .side { 
+            width: 6px; height: 100%; 
+            background: linear-gradient(145deg, #a11227, #b71c1c);
+            box-shadow: inset 1px 0 2px rgba(0,0,0,0.3);
+        }
+        .gift-box .side.left { left: 0; transform: translateZ(-3px) rotateY(-90deg); }
+        .gift-box .side.right { right: 0; transform: translateZ(3px) rotateY(90deg); }
+
+        /* Золотой бант */
+        .ribbon {
+            position: absolute;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            box-shadow: 0 4px 12px rgba(255,215,0,0.4);
+            z-index: 3;
+            border-radius: 4px;
+        }
+        .ribbon.horizontal { width: 100%; height: 8px; top: 45%; }
+        .ribbon.vertical { height: 100%; width: 8px; left: 45%; }
+        .ribbon.bow {
+            width: 24px; height: 24px;
+            top: 38%; left: 38%;
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(255,215,0,0.6);
+            animation: bowFloat 3s ease-in-out infinite;
+        }
+        @keyframes bowFloat { 0%, 100% { transform: scale(1) rotateZ(0deg); } 50% { transform: scale(1.05) rotateZ(180deg); } }
+
+        /* Этикетка с профессией */
+        .label {
+            position: absolute;
+            background: linear-gradient(145deg, #fff, #f8f9fa);
+            width: 70%; height: 28%;
+            top: 32%; left: 15%;
+            border-radius: 6px;
+            border: 2px solid #ffd700;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            font-weight: bold;
+            font-size: 10px;
+            font-weight: 600;
+            color: #333;
             text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
+            padding: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 4;
+            animation: labelBounce 2s ease-in-out infinite;
         }
-        .gift-front {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            border: 3px solid #ffd93d;
+        @keyframes labelBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2px); }
         }
-        .gift-back {
-            background: linear-gradient(45deg, #48dbfb, #0abde3);
-            color: white;
-            transform: rotateY(180deg);
-            border: 3px solid #0abde3;
+
+        /* Записка */
+        .note {
+            position: absolute;
+            top: 60%; left: 10%; right: 10%;
+            background: linear-gradient(145deg, #fff8dc, #f4e4bc);
+            border: 2px dashed #d4a574;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #8b4513;
+            font-family: 'Georgia', serif;
+            transform: scale(0) rotateX(90deg);
+            transform-origin: top;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 5;
         }
+        .gift.show-note .note { transform: scale(1) rotateX(0deg); }
+
+        /* Имя */
+        .name {
+            position: absolute;
+            bottom: 15%; left: 20%; right: 20%;
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #8b0000;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            transform: translateY(20px) scale(0.8);
+            opacity: 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 16px rgba(255,215,0,0.4);
+            z-index: 6;
+        }
+        .gift.show-name .name {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
-            .gifts-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; }
+            .gifts-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+            .label { font-size: 9px; }
+            .note { font-size: 10px; padding: 8px; }
         }
     </style>
 </head>
 <body>
-    <h1>🎁 Новый Год с командой V3 🎁</h1>
+    <h1>🎁 Что ты хотел стать в детстве? 🎁</h1>
     <div class="gifts-grid" id="giftsGrid"></div>
 
     <script>
         const hints = [
-            'черепашка-ниндзя','архитектор','взрослый человек','космонавт','пекарь-путешественник','пастух','дизайнер интерьеров','актер озвучки, блоггер', 'диджей и повар',
-            'батюшка и сотрудник МЧС', 'продавец мяса на рынке', 'взрослый (хочет разгадать желание назад)', 'учитель английского','принцесса','певица и шпионка из тотали спайс','Баяист и играть в ансамбле',
-            'ветеринар','учитель','повар','человек паук','следователь','путешествовать и пить кокос','архитектор',
+            'черепашка-ниндзя', 'архитектор', 'взрослый человек', 'космонавт', 'пекарь-путешественник',
+            'пастух', 'дизайнер интерьеров', 'актёр озвучки', 'блогер', 'программист',
+            'художник', 'диджей', 'повар', 'батюшка', 'сотрудник МЧС',
+            'разработчик', 'дизайнер', 'продавец', 'учительница', 'адвокат',
+            'взрослая', 'учитель английского', 'кассир', 'пиццамейкер', 'бариста'
         ];
         const names = [
-            'Анна', 'Иван', 'Мария', 'Дмитрий', 'Елена', 'Алексей', 'Леся', 'Сергей',
-            'Татьяна', 'Михаил', 'Наталья', 'Владимир', 'Ирина', 'Павел', 'Юлия', 'Андрей',
-            'Екатерина', 'Николай', 'Светлана', 'Роман', 'Виктория', 'Денис', 'Анастасия',
-            'Артём', 'Ксения'
-        ];
-        const messages = [
-            'Анна, спасибо за твою энергию! 🎉', 'Иван, лучший кодер команды! 💻',
-            'Мария, твои идеи вдохновляют! ✨', 'Дмитрий, мастер дедлайнов! ⏰',
-            // Добавьте 21 уникальное сообщение для каждого
-            'Елена, душа команды! ❤️', 'Алексей, гуру UX! 🎨', 'Ольга, всегда на связи! 📞',
-            'Сергей, эксперт по API! 🔗', 'Татьяна, креативщица! 🌟', 'Михаил, рок-звезда! 🎸',
-            'Наталья, супер-тестер! 🧪', 'Владимир, стратег! 📊', 'Ирина, волшебница CSS! 🎪',
-            'Павел, быстрый как Flash! ⚡', 'Юлия, лидер по праву! 👑', 'Андрей, мастер JS! ⚙️',
-            'Екатерина, дизайнер мечты! 🖌️', 'Николай, база знаний! 📚', 'Светлана, оптимизатор! 🚀',
-            'Роман, backend-волшебник! 🪄', 'Виктория, фронтенд-королева! 👸', 'Денис, UX-гуру! 🧠',
-            'Анастасия, стильная кодерша! 💃', 'Артём, реакт-мастер! ⚛️', 'Ксения, QA-легенда! 🛡️'
+            'Анна', 'Иван', 'Мария', 'Дмитрий', 'Елена', 'Алексей', 'Ольга', 'Сергей',
+            'Татьяна', 'Михаил', 'Наталья', 'Владимир', 'Ирина', 'Павел', 'Юлия',
+            'Андрей', 'Екатерина', 'Николай', 'Светлана', 'Роман',
+            'Виктория', 'Денис', 'Анастасия', 'Артём', 'Ксения'
         ];
 
         const grid = document.getElementById('giftsGrid');
         hints.forEach((hint, index) => {
             const gift = document.createElement('div');
-            gift.className = 'gift';
+            gift.className = 'gift unopened';
+            gift.dataset.index = index;
             gift.innerHTML = `
-                <div class="gift-inner">
-                    <div class="gift-front">${hint}</div>
-                    <div class="gift-back">${messages[index]}</div>
+                <div class="gift-wrapper">
+                    <div class="gift-box">
+                        <div class="face bottom"></div>
+                        <div class="face lid"></div>
+                        <div class="face side left"></div>
+                        <div class="face side right"></div>
+                        <div class="ribbon horizontal"></div>
+                        <div class="ribbon vertical"></div>
+                        <div class="ribbon bow">🎀</div>
+                        <div class="label">${hint}</div>
+                    </div>
+                    <div class="note">Спасибо за твою уникальность! ${hint.charAt(0).toUpperCase() + hint.slice(1)} — это круто! ✨</div>
+                    <div class="name">${names[index]}</div>
                 </div>
             `;
+            
+            let state = 'unopened'; // unopened, note, name
+            
             gift.addEventListener('click', () => {
-                gift.classList.toggle('flipped');
-                // После клика на открытый подарок можно добавить логику показа имени
-                if (gift.classList.contains('flipped')) {
-                    setTimeout(() => {
-                        gift.querySelector('.gift-back').textContent = names[index];
-                    }, 1000);
+                if (state === 'unopened') {
+                    // 1. Подарок → записка
+                    gift.classList.remove('unopened');
+                    gift.classList.add('opening', 'show-note');
+                    state = 'note';
+                } else if (state === 'note') {
+                    // 2. Записка → имя
+                    gift.classList.add('show-name');
+                    gift.classList.remove('opening');
+                    gift.classList.add('opened');
+                    state = 'name';
+                } else if (state === 'name') {
+                    // 3. Имя → назад (но подарок остаётся открытым)
+                    gift.classList.remove('show-name');
+                    state = 'opened';
                 }
             });
+            
             grid.appendChild(gift);
         });
     </script>
