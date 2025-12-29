@@ -1,3 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>2025 с командой V3</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1b1b1b, #000);
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin: 30px 0;
+  font-size: 44px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 60px;
+  padding: 50px;
+  max-width: 1600px;
+  margin: auto;
+  perspective: 1200px;
+}
+
+/* ===== GIFT ===== */
+.gift {
+  width: 200px;
+  height: 210px;
+  position: relative;
+  margin: auto;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform .3s;
+}
+
+.gift:hover {
+  transform: translateY(-14px);
+}
+
+/* BOX */
+.box {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 135px;
+  background: #c40000;
+  border-radius: 14px;
+}
+
+/* LID */
+.lid {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  background: #e00000;
+  border-radius: 14px;
+  transform-origin: top;
+  transition: transform .8s cubic-bezier(.19,1,.22,1);
+}
+
+/* RIBBONS */
+.ribbon-v, .ribbon-h {
+  position: absolute;
+  background: linear-gradient(#f5c542, #d4a017);
+}
+
+.ribbon-v {
+  width: 18px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ribbon-h {
+  height: 18px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* BOW */
+.bow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 64px;
+  height: 42px;
+  transform: translateX(-50%);
+  animation: bowPulse 2.2s infinite;
+}
+
+.bow::before,
+.bow::after {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(#f5c542, #d4a017);
+  border-radius: 50%;
+}
+
+.bow::before { left: 0; }
+.bow::after { right: 0; }
+
+@keyframes bowPulse {
+  0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
+  50% { transform: translateX(-50%) scale(1.12) rotate(8deg); }
+}
+
+/* PROFESSION */
+.profession {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  padding: 6px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  text-align: center;
+  animation: jump 1.6s infinite;
+}
+
+@keyframes jump {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* NOTE */
+.note {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: #fff;
+  color: #000;
+  padding: 14px;
+  width: 175px;
+  border-radius: 12px;
+  font-size: 14px;
+  opacity: 0;
+  transition: .6s;
+  z-index: 2;
+}
+
+.note.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1) translateY(-12px);
+}
+
+/* NAME */
 .name {
   position: absolute;
   top: 110px;
@@ -32,3 +195,125 @@
     opacity: 1;
   }
 }
+}
+</style>
+</head>
+
+<body>
+<h1>2025 с командой V3</h1>
+<div class="grid" id="grid"></div>
+
+<script>
+const hints = [
+'Черепашка ниндзя','Архитектор','Взрослый','Космонавт','Пекарь-путешественник',
+'Пастух','Дизайнер интерьеров','Актёр озвучки','Художник','Диджей | Повар',
+'Батюшка | Сотрудник МЧС','Продавец мяса на рынке','Взрослая','Учитель английского',
+'Принцесса','Шпионка тотали спайс','Баянист','Учитель','Повар','Человек-паук',
+'Следователь','Путешественник с кокосом','Архитектор','Ветеринар','Стюардесса',
+'Врач | Батюшка'
+];
+
+const names = [
+'Влад Плаксин','Ефремов Никита','Юра Харченко','Петринич Никита','Сережа Соловьев',
+'Миша Станкеев','Олесья Юревна','Кузнецов Дмитрий','Оксана Кузьменко','Егор Гемельянов',
+'Артём Сергунин','Диана Гарбуз','Виктория Щербо','Настя Дунаева','Майя Мищенко',
+'Настя Жихарева','Рафаиль Копров','Звонкович Анастасия','Самвел Оганесян','Илья Иёшкин',
+'Даша Ревтович','Александр Мамонтов','Вадим Сусько','Каролина Бикчурина',
+'Даша Чигилейчик','Жук Дима'
+];
+
+const achievements = [
+'Побывал в 3-х новых странах — Эмираты, Испания, Франция',
+'Получил права на мот и откатал сезон',
+'Все события 15-ого числа — день зарплаты 😄',
+'Концерт Тимберлейка, Сванетия, родственники',
+'Берём квартиру с женой 🏠',
+'Суздаль, новая работа, велосипед',
+'Госэкзамен Кипра, замуж, бокс',
+'8K зрение, Питер, новая работа',
+'Трудоустройство 😈',
+'Стиралка + кото- и собако-гвардия',
+'v3, свадьбы, ATL, день рождения',
+'Работа, 5 созвонов, Минск',
+'Кошка, Европа, тату',
+'Сладкая булочка 😊',
+'Египет, Вьетнам, Дагестан',
+'v3 команда, брекеты сняты',
+'Выборг с семьёй',
+'Диджеинг, контракт',
+'Рабочее место мечты',
+'Путешествия',
+'Родился племянник',
+'Кокос на пляже 🏖️',
+'Exit Festival',
+'20 кг сома 😅',
+'2 моря',
+'Сестра замужем'
+];
+
+const grid = document.getElementById('grid');
+
+hints.forEach((hint, i) => {
+  const gift = document.createElement('div');
+  gift.className = 'gift';
+  gift.dataset.step = 0;
+  gift.dataset.opened = 'false';
+
+  gift.innerHTML = `
+    <div class="lid"></div>
+    <div class="bow"></div>
+    <div class="box">
+      <div class="ribbon-v"></div>
+      <div class="ribbon-h"></div>
+    </div>
+    <div class="profession">${hint}</div>
+    <div class="note">${achievements[i] || ''}</div>
+    <div class="name">${names[i] || ''}</div>
+  `;
+
+ gift.addEventListener('click', () => {
+  let step = Number(gift.dataset.step);
+  const lid = gift.querySelector('.lid');
+  const note = gift.querySelector('.note');
+  const name = gift.querySelector('.name');
+
+  if (step === 0) {
+    lid.style.transform = 'rotateX(-110deg)';
+    gift.dataset.step = 1;
+  } 
+  else if (step === 1) {
+    note.classList.add('show');
+    gift.dataset.step = 2;
+  } 
+  else if (step === 2) {
+    name.classList.add('show');
+    gift.dataset.step = 3;
+  } 
+  else if (step === 3 && gift.dataset.opened === 'false') {
+    note.classList.remove('show'); // ❗ имя НЕ трогаем
+    gift.dataset.opened = 'true';
+  }
+});
+
+
+    if (step === 0) {
+      lid.style.transform = 'rotateX(-110deg)';
+      gift.dataset.step = 1;
+    } else if (step === 1) {
+      note.classList.add('show');
+      gift.dataset.step = 2;
+    } else if (step === 2) {
+      name.classList.add('show');
+      gift.dataset.step = 3;
+    } else if (step === 3 && gift.dataset.opened === 'false') {
+      note.classList.remove('show');
+      name.classList.remove('show');
+      gift.dataset.opened = 'true';
+    }
+  });
+
+  grid.appendChild(gift);
+});
+</script>
+</body>
+</html>
