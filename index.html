@@ -49,7 +49,7 @@ h1 {
 }
 
 .gift.active {
-  z-index: 50; /* ← чтобы карточка была поверх других */
+  z-index: 50; /* карточка поверх остальных при открытии */
 }
 
 /* BOX */
@@ -119,8 +119,8 @@ h1 {
 .bow::after { right: 0; }
 
 @keyframes bowPulse {
-  0%,100% { transform: translateX(-50%) scale(1); }
-  50% { transform: translateX(-50%) scale(1.12); }
+  0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
+  50% { transform: translateX(-50%) scale(1.12) rotate(8deg); }
 }
 
 /* PROFESSION */
@@ -134,36 +134,42 @@ h1 {
   padding: 6px 14px;
   font-size: 14px;
   border-radius: 10px;
+  animation: jump 1.6s infinite;
 }
 
-/* ===== NOTE (АПГРЕЙД) ===== */
+@keyframes jump {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* NOTE */
 .note {
   position: absolute;
   top: 28px;
   left: 50%;
-  transform: translateX(-50%) scale(0.85);
+  transform: translateX(-50%) scale(0);
   background: #fff;
   color: #000;
-  padding: 20px;
-  width: 330px;
-  max-height: 260px;
-  border-radius: 16px;
-  font-size: 15px;
+  padding: 14px;
+  width: 320px;       /* шире */
+  max-height: 260px;  /* выше */
+  border-radius: 12px;
+  font-size: 14px;
   line-height: 1.5;
   opacity: 0;
-  overflow-y: auto;
-  white-space: pre-line;     /* ← абзацы */
+  overflow-y: auto;   /* скролл */
+  white-space: pre-line; /* переносы \n */
   transition: .5s;
   z-index: 10;
-  box-shadow: 0 18px 40px rgba(0,0,0,.5);
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
 }
 
 .note.show {
   opacity: 1;
-  transform: translateX(-50%) scale(1) translateY(-20px);
+  transform: translateX(-50%) scale(1) translateY(-12px);
 }
 
-/* ZOOM ПО ДВОЙНОМУ КЛИКУ */
+/* Zoom по двойному клику */
 .note.zoom {
   position: fixed;
   top: 50%;
@@ -171,8 +177,9 @@ h1 {
   width: 80vw;
   max-height: 80vh;
   transform: translate(-50%, -50%);
-  z-index: 1000;
   font-size: 18px;
+  line-height: 1.7;
+  z-index: 1000;
 }
 
 /* NAME */
@@ -187,11 +194,17 @@ h1 {
   background: rgba(0,0,0,0.75);
   padding: 6px 14px;
   border-radius: 10px;
+  z-index: 3;
 }
 
 .name.show {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
+  animation: namePop .9s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+@keyframes namePop {
+  0% { transform: translateX(-50%) scale(0.6); opacity: 0; }
+  70% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
 </style>
 </head>
@@ -201,13 +214,52 @@ h1 {
 <div class="grid" id="grid"></div>
 
 <script>
-const achievements = [
-  'Покупка пульта для диджеинга\nПервый сет\nКонтракт\nПосудомойка маме',
-  'Много путешествий\nПереезд\nНовый этап'
+const hints = [
+'Черепашка ниндзя','Архитектор','Взрослый','Космонавт','Пекарь-путешественник',
+'Пастух','Дизайнер интерьеров','Актёр озвучки','Художник','Диджей | Повар',
+'Батюшка | Сотрудник МЧС','Продавец мяса на рынке','Взрослая','Учитель английского',
+'Принцесса','Шпионка тотали спайс','Баянист','Учитель','Повар','Человек-паук',
+'Следователь','Путешественник с кокосом','Архитектор','Ветеринар','Стюардесса',
+'Врач | Батюшка'
 ];
 
-const names = ['Аня', 'Макс'];
-const hints = ['DJ', 'Путешественник'];
+const names = [
+'Влад Плаксин','Ефремов Никита','Юра Харченко','Петринич Никита','Сережа Соловьев',
+'Миша Станкеев','Олесья Юревна','Кузнецов Дмитрий','Оксана Кузьменко','Егор Гемельянов',
+'Артём Сергунин','Диана Гарбуз','Виктория Щербо','Настя Дунаева','Майя Мищенко',
+'Настя Жихарева','Рафаиль Копров','Звонкович Анастасия','Самвел Оганесян','Илья Иёшкин',
+'Даша Ревтович','Александр Мамонтов','Вадим Сусько','Каролина Бикчурина',
+'Даша Чигилейчик','Жук Дима'
+];
+
+const achievements = [
+  '3 новые страны — Эмираты, Испания, Франция',
+  'Получение прав на мот и откатанный первый сезон',
+  'Все события 15-го числа — день зарплаты',
+  'Концерт Тимберлейка и поездка в Сванетию',
+  'Подготовка документов на квартиру',
+  'Поездки в Суздаль, новая работа и катание на велосипеде',
+  'Выжил(а). Сдал(а) госэкзамен на знание истории и культуры страны, брак, жареные хинкали и бокс',
+  'Коррекция зрения, Питер, новая работа и путешествия',
+  'Трудоустройство',
+  'Покупка новой стиральной машины',
+  'V3 и победа над филдами, несколько свадеб и концерт ATL',
+  'Трудоустройство, переезд и всего 5 созвонов за год',
+  'Появилась кошка, путешествия по Европе, встреча с лидом и новые тату',
+  'В этом году был(а) сладкой булочкой',
+  'Много путешествий, вождение в Махачкале, рассвет на самой высокой горе Египта и катание на подводной лодке',
+  'Развитие команды V3 и диз-систем, снятие брекетов и выдача лучшей подруги замуж',
+  'Поездки с семьёй в Выборг и на базу отдыха Иллоранта',
+  'Покупка пульта для диджеинга и сведение первого сета\nЛечение руки и возвращение на тренировки\nПерезаключение контракта с компанией на много лет\nПокупка подарка маме — большая посудомоечная машина',
+  'Собрано рабочее место мечты',
+  'Много путешествий и переезд в страну мечты',
+  'Родился племянник и путешествие в Европу',
+  'Путешествия и кокос на пляже',
+  'Путешествие в Сербию, фестиваль Exit и белорусский фестиваль Купалле в Тбилиси',
+  'Трудоустройство, сом на 20 кг, наркоз и два концерта в других странах',
+  'Две поездки на море',
+  'Сестра вышла замуж, поездка в Питер, стал(а) землевладельцем, строительство гаража, сарая, курятника и пьяное падение с мотоцикла'
+];
 
 const grid = document.getElementById('grid');
 
@@ -225,13 +277,19 @@ hints.forEach((hint, i) => {
       <div class="ribbon-h"></div>
     </div>
     <div class="profession">${hint}</div>
-    <div class="note">${achievements[i]}</div>
-    <div class="name">${names[i]}</div>
+    <div class="note">${achievements[i] || ''}</div>
+    <div class="name">${names[i] || ''}</div>
   `;
 
   const lid = gift.querySelector('.lid');
   const note = gift.querySelector('.note');
   const name = gift.querySelector('.name');
+
+  // Double click для увеличения заметки
+  note.addEventListener('dblclick', e => {
+    e.stopPropagation(); // click по подарку не срабатывает
+    note.classList.toggle('zoom');
+  });
 
   gift.addEventListener('click', () => {
     const step = Number(gift.dataset.step);
@@ -239,24 +297,21 @@ hints.forEach((hint, i) => {
     if (step === 0) {
       lid.style.transform = 'rotateX(-110deg)';
       gift.dataset.step = '1';
-    } else if (step === 1) {
+    } 
+    else if (step === 1) {
       note.classList.add('show');
-      gift.classList.add('active');
+      gift.classList.add('active'); // карточка поверх сетки
       gift.dataset.step = '2';
-    } else if (step === 2) {
+    } 
+    else if (step === 2) {
       name.classList.add('show');
       gift.dataset.step = '3';
-    } else if (step === 3 && gift.dataset.opened !== 'true') {
+    } 
+    else if (step === 3 && gift.dataset.opened !== 'true') {
       note.classList.remove('show');
       gift.classList.remove('active');
       gift.dataset.opened = 'true';
     }
-  });
-
-  /* DOUBLE CLICK ZOOM */
-  note.addEventListener('dblclick', e => {
-    e.stopPropagation();
-    note.classList.toggle('zoom');
   });
 
   grid.appendChild(gift);
@@ -264,3 +319,4 @@ hints.forEach((hint, i) => {
 </script>
 </body>
 </html>
+
