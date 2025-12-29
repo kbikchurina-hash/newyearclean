@@ -1,246 +1,242 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<title>2025 с командой V3</title>
-
-<style>
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
-
-body {
-  margin: 0;
-  background: radial-gradient(circle at top, #1a1a1a, #000);
-  color: white;
-  text-align: center;
-}
-
-h1 {
-  margin: 30px 0 10px;
-  font-size: 42px;
-  letter-spacing: 1px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 40px;
-  padding: 40px;
-  max-width: 1400px;
-  margin: auto;
-  perspective: 1200px;
-}
-
-/* ===== GIFT ===== */
-.gift {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  margin: auto;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: transform 0.3s;
-}
-
-.gift:hover {
-  transform: translateY(-10px);
-}
-
-/* BOX */
-.box {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 120px;
-  background: #c40000;
-  border-radius: 10px;
-}
-
-/* LID */
-.lid {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  background: #e00000;
-  border-radius: 10px;
-  transform-origin: top;
-  transition: transform 0.8s ease;
-}
-
-/* RIBBONS */
-.ribbon-v, .ribbon-h {
-  position: absolute;
-  background: linear-gradient(#f5c542, #d4a017);
-}
-
-.ribbon-v {
-  width: 20px;
-  height: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ribbon-h {
-  height: 20px;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* BOW */
-.bow {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  width: 60px;
-  height: 40px;
-  transform: translateX(-50%);
-  animation: bowPulse 2s infinite;
-}
-
-.bow::before,
-.bow::after {
-  content: "";
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(#f5c542, #d4a017);
-  border-radius: 50%;
-}
-
-.bow::before { left: 0; }
-.bow::after { right: 0; }
-
-@keyframes bowPulse {
-  0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
-  50% { transform: translateX(-50%) scale(1.1) rotate(6deg); }
-}
-
-/* LABEL */
-.label {
-  position: absolute;
-  bottom: -32px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  color: black;
-  padding: 4px 10px;
-  font-size: 13px;
-  border-radius: 6px;
-  animation: labelBounce 1.6s infinite;
-}
-
-@keyframes labelBounce {
-  0%,100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-5px); }
-}
-
-/* NOTE */
-.note {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%) scale(0);
-  background: #fff;
-  color: #000;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  opacity: 0;
-  transition: 0.6s;
-}
-
-.note.show {
-  opacity: 1;
-  transform: translateX(-50%) scale(1) translateY(-10px);
-}
-
-/* NAME */
-.name {
-  position: absolute;
-  bottom: -80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(40px);
-  font-size: 20px;
-  opacity: 0;
-}
-
-.name.show {
-  animation: nameBounce 1s forwards;
-}
-
-@keyframes nameBounce {
-  0% { transform: translateX(-50%) translateY(40px); opacity: 0; }
-  60% { transform: translateX(-50%) translateY(-10px); opacity: 1; }
-  100% { transform: translateX(-50%) translateY(0); }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 с командой V3</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #d00;
+            margin-bottom: 20px;
+        }
+        .gifts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+        }
+        .gift {
+            perspective: 1000px;
+            width: 150px;
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        .gift:hover {
+            transform: translateY(-10px);
+        }
+        .gift-box {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .box-bottom {
+            width: 100%;
+            height: 100%;
+            background-color: #c00;
+            position: absolute;
+            transform: translateZ(-75px);
+        }
+        .box-lid {
+            width: 100%;
+            height: 100%;
+            background-color: #c00;
+            position: absolute;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        .ribbon-horizontal, .ribbon-vertical {
+            position: absolute;
+            background-color: #ffd700;
+            opacity: 0.8;
+        }
+        .ribbon-horizontal {
+            width: 100%;
+            height: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .ribbon-vertical {
+            width: 20px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .bow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: #ffd700;
+            border-radius: 50%;
+            animation: pulse 2s infinite alternate, rotate-bow 5s infinite linear;
+        }
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        @keyframes rotate-bow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .label {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            color: black;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        .gift:hover .label {
+            transform: translateY(-5px);
+            animation: bounce-label 0.5s;
+        }
+        @keyframes bounce-label {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(-5px); }
+        }
+        .note {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ffd700;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0;
+            transition: transform 0.5s 0.2s, opacity 0.5s 0.2s;
+        }
+        .name {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            color: #d00;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.5s 0.4s ease-out, opacity 0.5s 0.4s;
+        }
+        .opened .box-lid {
+            transform: rotateX(-110deg);
+        }
+        .note-visible .note {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .name-visible .name {
+            transform: translateY(0);
+            opacity: 1;
+            animation: bounce-name 1s;
+        }
+        @keyframes bounce-name {
+            0% { transform: translateY(100%); }
+            60% { transform: translateY(-20px); }
+            80% { transform: translateY(10px); }
+            100% { transform: translateY(0); }
+        }
+        .permanent {
+            pointer-events: none;
+        }
+    </style>
 </head>
-
 <body>
-<h1>2025 с командой V3</h1>
+    <h1>2025 с командой V3</h1>
+    <div class="gifts-container"></div>
 
-<div class="grid" id="grid"></div>
+    <script>
+        const hints = ['черепашка-ниндзя','архитектор','взрослый','космонавт','пекарь-путешественник','пастух','дизайнер интерьеров','актёр озвучки','блогер','программист','художник','диджей','повар','батюшка','сотрудник МЧС','разработчик','дизайнер','продавец','учительница','адвокат','взрослая','учитель английского','кассир','пиццамейкер','бариста'];
+        const names = ['Анна','Иван','Мария','Дмитрий','Елена','Алексей','Ольга','Сергей','Татьяна','Михаил','Наталья','Владимир','Ирина','Павел','Юлия','Андрей','Екатерина','Николай','Светлана','Роман','Виктория','Денис','Анастасия','Артём','Ксения'];
+        const noteText = 'факты про меня ✨'; // Fixed note text as per logic
+        // Assuming facts is a typo or incomplete; using fixed note as described
 
-<script>
-const hints = [
-'черепашка-ниндзя','архитектор','взрослый','космонавт','пекарь-путешественник',
-'пастух','дизайнер интерьеров','актёр озвучки','блогер','программист',
-'художник','диджей','повар','батюшка','сотрудник МЧС',
-'разработчик','дизайнер','продавец','учительница','адвокат',
-'взрослая','учитель английского','кассир','пиццамейкер','бариста'
-];
+        const container = document.querySelector('.gifts-container');
 
-const names = [
-'Анна','Иван','Мария','Дмитрий','Елена','Алексей','Ольга','Сергей','Татьяна','Михаил',
-'Наталья','Владимир','Ирина','Павел','Юлия','Андрей','Екатерина','Николай','Светлана',
-'Роман','Виктория','Денис','Анастасия','Артём','Ксения'
-];
+        for (let i = 0; i < 25; i++) {
+            const gift = document.createElement('div');
+            gift.classList.add('gift');
+            gift.dataset.clickCount = 0;
 
-const fact = 'факты про меня ✨<br>— вышел(а) замуж';
+            const box = document.createElement('div');
+            box.classList.add('gift-box');
 
-const grid = document.getElementById("grid");
+            const bottom = document.createElement('div');
+            bottom.classList.add('box-bottom');
 
-hints.forEach((hint, i) => {
-  const gift = document.createElement("div");
-  gift.className = "gift";
-  gift.dataset.step = 0;
+            const lid = document.createElement('div');
+            lid.classList.add('box-lid');
 
-  gift.innerHTML = `
-    <div class="lid"></div>
-    <div class="bow"></div>
-    <div class="box">
-      <div class="ribbon-v"></div>
-      <div class="ribbon-h"></div>
-    </div>
-    <div class="note">${fact}</div>
-    <div class="name">${names[i]}</div>
-    <div class="label">${hint}</div>
-  `;
+            const ribbonH = document.createElement('div');
+            ribbonH.classList.add('ribbon-horizontal');
+            const ribbonV = document.createElement('div');
+            ribbonV.classList.add('ribbon-vertical');
 
-  gift.addEventListener("click", () => {
-    let step = Number(gift.dataset.step);
-    const lid = gift.querySelector(".lid");
-    const note = gift.querySelector(".note");
-    const name = gift.querySelector(".name");
+            const bow = document.createElement('div');
+            bow.classList.add('bow');
 
-    if (step === 0) {
-      lid.style.transform = "rotateX(-110deg)";
-      gift.dataset.step = 1;
-    } else if (step === 1) {
-      note.classList.add("show");
-      gift.dataset.step = 2;
-    } else if (step === 2) {
-      name.classList.add("show");
-      gift.dataset.step = 3;
-    }
-  });
+            const label = document.createElement('div');
+            label.classList.add('label');
+            label.textContent = hints[i];
 
-  grid.appendChild(gift);
-});
-</script>
+            const note = document.createElement('div');
+            note.classList.add('note');
+            note.textContent = noteText;
+
+            const nameEl = document.createElement('div');
+            nameEl.classList.add('name');
+            nameEl.textContent = names[i];
+
+            lid.appendChild(ribbonH);
+            lid.appendChild(ribbonV);
+            lid.appendChild(bow);
+
+            box.appendChild(bottom);
+            box.appendChild(lid);
+            box.appendChild(note);
+            box.appendChild(nameEl);
+
+            gift.appendChild(box);
+            gift.appendChild(label);
+
+            gift.addEventListener('click', () => {
+                let count = parseInt(gift.dataset.clickCount);
+                count++;
+                gift.dataset.clickCount = count;
+
+                if (count === 1) {
+                    gift.classList.add('opened');
+                } else if (count === 2) {
+                    gift.classList.add('note-visible');
+                } else if (count === 3) {
+                    gift.classList.add('name-visible');
+                    gift.classList.add('permanent');
+                }
+            });
+
+            container.appendChild(gift);
+        }
+    </script>
 </body>
 </html>
+
