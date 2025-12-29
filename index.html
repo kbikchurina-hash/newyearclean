@@ -1,112 +1,246 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎁 Подарки команды</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            font-family: -apple-system, sans-serif;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        h1 {
-            color: white;
-            text-align: center;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            margin-bottom: 50px;
-            text-shadow: 0 0 30px rgba(255,255,255,0.5);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .gift {
-            height: 240px;
-            cursor: pointer;
-            position: relative;
-            perspective: 1000px;
-            transition: transform 0.3s ease;
-        }
-        .gift:hover { transform: translateY(-10px) rotateY(5deg); }
-        
-        .box {
-            position: relative;
-            width: 180px;
-            height: 100%;
-            margin: 0 auto;
-            transform-style: preserve-3d;
-        }
-        
-        .bottom {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 160px;
-            height: 140px;
-            background: linear-gradient(145deg, #e74c3c, #c0392b);
-            border-radius: 0 0 25px 25px;
-            border: 4px solid #a93226;
-            box-shadow: 0 20px 40px rgba(231,76,60,0.4), inset 0 2px 10px rgba(255,255,255,0.2);
-            transform: translateX(-50%);
-        }
-        
-        .lid {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 160px;
-            height: 130px;
-            background: linear-gradient(145deg, #e74c3c, #c0392b);
-            border-radius: 25px 25px 0 0;
-            border: 4px solid #a93226;
-            box-shadow: 0 15px 30px rgba(231,76,60,0.4), inset 0 3px 12px rgba(255,255,255,0.25);
-            transform: translateX(-50%);
-            transform-origin: bottom;
-            transition: all 0.8s ease-out;
-            z-index: 10;
-        }
-        
-        .gift.open .lid {
-            transform: translateX(-50%) rotateX(-110deg);
-        }
-        
-        .ribbon-v {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 12px;
-            margin-left: -6px;
-            background: linear-gradient(45deg, #f1c40f, #f39c12);
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(241,196,15,0.6);
-        }
-        .ribbon-h {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 12px;
-            margin-top: -6px;
-            background: linear-gradient(45deg, #f1c40f, #f39c12);
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(241,196,15,0.6);
-        }
-        
-        .bow {
-            position: absolute;
-            top: 95px;
-            left: 75px;
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle, #f1c40f 0%, #f39c12 70%);
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(241,196,15,0.8), inset 0 4px 10px rgba(255,255,255,0.4);
-            animation: bowGlow 2s ease-in-out infinite alternate;
-        }
+<meta charset="UTF-8" />
+<title>2025 с командой V3</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #1a1a1a, #000);
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin: 30px 0 10px;
+  font-size: 42px;
+  letter-spacing: 1px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 40px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: auto;
+  perspective: 1200px;
+}
+
+/* ===== GIFT ===== */
+.gift {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: auto;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.3s;
+}
+
+.gift:hover {
+  transform: translateY(-10px);
+}
+
+/* BOX */
+.box {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 120px;
+  background: #c40000;
+  border-radius: 10px;
+}
+
+/* LID */
+.lid {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: #e00000;
+  border-radius: 10px;
+  transform-origin: top;
+  transition: transform 0.8s ease;
+}
+
+/* RIBBONS */
+.ribbon-v, .ribbon-h {
+  position: absolute;
+  background: linear-gradient(#f5c542, #d4a017);
+}
+
+.ribbon-v {
+  width: 20px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ribbon-h {
+  height: 20px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* BOW */
+.bow {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  width: 60px;
+  height: 40px;
+  transform: translateX(-50%);
+  animation: bowPulse 2s infinite;
+}
+
+.bow::before,
+.bow::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(#f5c542, #d4a017);
+  border-radius: 50%;
+}
+
+.bow::before { left: 0; }
+.bow::after { right: 0; }
+
+@keyframes bowPulse {
+  0%,100% { transform: translateX(-50%) scale(1) rotate(0); }
+  50% { transform: translateX(-50%) scale(1.1) rotate(6deg); }
+}
+
+/* LABEL */
+.label {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  animation: labelBounce 1.6s infinite;
+}
+
+@keyframes labelBounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* NOTE */
+.note {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: #fff;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transition: 0.6s;
+}
+
+.note.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1) translateY(-10px);
+}
+
+/* NAME */
+.name {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(40px);
+  font-size: 20px;
+  opacity: 0;
+}
+
+.name.show {
+  animation: nameBounce 1s forwards;
+}
+
+@keyframes nameBounce {
+  0% { transform: translateX(-50%) translateY(40px); opacity: 0; }
+  60% { transform: translateX(-50%) translateY(-10px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0); }
+}
+</style>
+</head>
+
+<body>
+<h1>2025 с командой V3</h1>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const hints = [
+'черепашка-ниндзя','архитектор','взрослый','космонавт','пекарь-путешественник',
+'пастух','дизайнер интерьеров','актёр озвучки','блогер','программист',
+'художник','диджей','повар','батюшка','сотрудник МЧС',
+'разработчик','дизайнер','продавец','учительница','адвокат',
+'взрослая','учитель английского','кассир','пиццамейкер','бариста'
+];
+
+const names = [
+'Анна','Иван','Мария','Дмитрий','Елена','Алексей','Ольга','Сергей','Татьяна','Михаил',
+'Наталья','Владимир','Ирина','Павел','Юлия','Андрей','Екатерина','Николай','Светлана',
+'Роман','Виктория','Денис','Анастасия','Артём','Ксения'
+];
+
+const fact = 'факты про меня ✨<br>— вышел(а) замуж';
+
+const grid = document.getElementById("grid");
+
+hints.forEach((hint, i) => {
+  const gift = document.createElement("div");
+  gift.className = "gift";
+  gift.dataset.step = 0;
+
+  gift.innerHTML = `
+    <div class="lid"></div>
+    <div class="bow"></div>
+    <div class="box">
+      <div class="ribbon-v"></div>
+      <div class="ribbon-h"></div>
+    </div>
+    <div class="note">${fact}</div>
+    <div class="name">${names[i]}</div>
+    <div class="label">${hint}</div>
+  `;
+
+  gift.addEventListener("click", () => {
+    let step = Number(gift.dataset.step);
+    const lid = gift.querySelector(".lid");
+    const note = gift.querySelector(".note");
+    const name = gift.querySelector(".name");
+
+    if (step === 0) {
+      lid.style.transform = "rotateX(-110deg)";
+      gift.dataset.step = 1;
+    } else if (step === 1) {
+      note.classList.add("show");
+      gift.dataset.step = 2;
+    } else if (step === 2) {
+      name.classList.add("show");
+      gift.dataset.step = 3;
+    }
+  });
+
+  grid.appendChild(gift);
+});
+</script>
+</body>
+</html>
